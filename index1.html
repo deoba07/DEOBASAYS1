@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deoba says 2</title>
-    <link rel="stylesheet" href="index2.css">
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deoba's Game</title>
+<link rel="stylesheet" href="index1.css">
+<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 </head>
+
 <body>
-    
+
 <h1>Deoba Says</h1>
 <h3 id="score">Score: 0</h3>
 <h3 id="high-score">High Score: 0</h3>
@@ -18,38 +19,38 @@
 
 <div class="btn">
 <button id="start-btn">Start Game</button>  
-<a href="index1.html">
+<a href="index2.html">
 <button class="switch-btn" id="myBtn">Switch mode</button>
 </a>  <!--- <a href="index2.html" class="switch-btn"><button>Switch mode</button></a> -->
 </div>
 
 
+
 <div class="page-wrapper">
-  <div class="box"  id="circle"></div>
-  <div class="box"  id="square"></div>
+  <div class="box" style="background-color:red;" id="box1"></div>
+  <div class="box" style="background-color:blue;" id="box2"></div>
 </div>
 
 <div class="page-wrapper2">
-  <div class="box" id="triangle"></div>
-  <div class="box" id="x"></div>
+  <div class="box" style="background-color:green;" id="box3"></div>
+  <div class="box" style="background-color:yellow;" id="box4"></div>
 </div>
 
-
 <script>
-   let gamePattern = [];
-   let userClickedPattern = [];
 
-   let score = 0;
-   let highScore = 0;
-   let level = 0;
-   let started = false;
+let gamePattern = [];
+let userClickedPattern = [];
 
-   let buttonColors = ["circle", "square","triangle", "x"];
+let buttonColors = ["box1", "box2", "box3", "box4"];
 
-  const boxes =document.querySelectorAll(".box");
-   
+let started = false;
+let level = 0;
+let score = 0;
+let highScore = 0;
 
-   // AUDIO
+const boxes = document.querySelectorAll(".box");
+
+// AUDIO
 let audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 document.addEventListener("click", () => {
@@ -58,32 +59,29 @@ document.addEventListener("click", () => {
   }
 });
 
-document.getElementById("start-btn").addEventListener("click", function (){
-     if (!started) {
+// START BUTTON
+document.getElementById("start-btn").addEventListener("click", function () {
+  if (!started) {
     started = true;
     nextSequence();
   }
-})
+});
 
-
+// BOX CLICK
 boxes.forEach(box => {
   box.addEventListener("click", function () {
+
     if (!started) return;
 
-    let userChosen = this.id;
-    userClickedPattern.push(userChosen);
+    let userChosenColor = this.id;
 
-    console.log("User clicked:", userChosen);
-    console.log("Pattern:", gamePattern);
+    userClickedPattern.push(userChosenColor);
 
+    playSound(userChosenColor);
     flashBox(this);
-    playSound(userChosen);
-
     checkAnswer(userClickedPattern.length - 1);
   });
 });
-
-
 
 //Timer function
 let timeLeft = 0;
@@ -118,9 +116,6 @@ function startTimer() {
   }, 1000);
 }
 
-
-
-
 // NEXT SEQUENCE
 function nextSequence() {
 
@@ -146,8 +141,6 @@ function nextSequence() {
   startTimer();
 }
 
-
-
 // FLASH
 function flashBox(box) {
   box.classList.add("flash");
@@ -156,8 +149,6 @@ function flashBox(box) {
     box.classList.remove("flash");
   }, 300);
 }
-
-
 
 // CHECK ANSWER
 function checkAnswer(currentIndex) {
@@ -190,7 +181,9 @@ function gameOver() {
       "High Score: " + highScore;
   }
 
-  resetGame();
+  setTimeout(() => {
+    resetGame(); // 🔥 delay so sound finishes
+  }, 300);
 }
 
 // RESET
@@ -200,11 +193,14 @@ function resetGame() {
   started = false;
   level = 0;
   score = 0;
-  clearInterval(timerId);
+
+   clearInterval(timerId);
 
   document.getElementById("timer").innerText = "Time: 0";
   document.getElementById("score").innerText = "Score: 0";
   document.getElementById("level-title").innerText = "Press Start";
+
+ 
 }
 
 // SOUND ENGINE
@@ -231,16 +227,16 @@ function playTone(freq) {
 // SOUND MAP
 function playSound(color) {
   switch (color) {
-    case "circle":
+    case "box1":
       playTone(261.6);
       break;
-    case "square":
+    case "box2":
       playTone(329.6);
       break;
-    case "triangle":
+    case "box3":
       playTone(392.0);
       break;
-    case "x":
+    case "box4":
       playTone(523.3);
       break;
     case "wrong":
@@ -249,9 +245,6 @@ function playSound(color) {
   }
 }
 </script>
-
-
-
 
 </body>
 </html>
